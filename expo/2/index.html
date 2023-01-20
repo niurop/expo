@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      div {
+        margin: auto;
+
+        padding: 5px;
+
+        max-width: fit-content;
+
+        background-color: beige;
+        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px;
+        border-radius: 15px;
+      }
+
+      div.main {
+        max-width: none;
+        resize: both;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>ResizeObserver experiment</h1>
+    Resize
+    <pre>div</pre>
+    below and look at the console.
+    <h2>Notes:</h2>
+    <ul>
+      <li>
+        You can create just 1
+        <pre>ResizeObserver</pre>
+        and observe all DOMObjects with it;
+      </li>
+      <li>
+        <pre>entries</pre>
+        contain all and only elements that have changed;
+      </li>
+      <li>
+        You can take
+        <pre>contentRect</pre>
+        or
+        <pre>contentBoxSize</pre>
+        and
+        <pre>target</pre>
+        for each element in entry;
+      </li>
+      <li>
+        <pre>callback</pre>
+        is called after all css has been processed;
+      </li>
+      <li>
+        You can add a function to js representation of the
+        <pre>target</pre>
+        DOMObject, that will be called when it resizes;
+      </li>
+    </ul>
+    <div class="main">hello</div>
+    <script>
+      document.body.onload = () => {
+        const div = document.querySelector("div.main");
+
+        div.resizeCallback = (rect, target) => {
+          console.log("resize: ", rect, target);
+        };
+
+        const resizeObserver = new ResizeObserver((entries) => {
+          let innerHTML = "<div>";
+          for (const entry of entries) {
+            if (entry.contentBoxSize && entry.contentRect) {
+              innerHTML += `<b>${entry.target.tagName}</b><br>size: ${entry.contentBoxSize[0].inlineSize}x${entry.contentBoxSize[0].blockSize}<br>`;
+              console.log(
+                entry.contentBoxSize[0],
+                entry.contentRect,
+                entry.target
+              );
+              if (entry.target.resizeCallback)
+                entry.target.resizeCallback(entry.contentRect, entry.target);
+            }
+          }
+          innerHTML += "</div>";
+          div.innerHTML = innerHTML;
+
+          console.log("Size changed");
+        });
+        resizeObserver.observe(document.body);
+        resizeObserver.observe(div);
+      };
+    </script>
+  </body>
+</html>
