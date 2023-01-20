@@ -2,8 +2,8 @@
 I do a lot of testing and experimenting. Typically, I delete them after I'm done. Here I will collect them.
 
 ## Experiments included:
-1. Matrix display experiment
-2. ResizeObserver experiment 
+1. Matrix display experiment [https://niurop.github.io/expo/expo/1/index.html](https://niurop.github.io/expo/expo/1/index.html)
+2. ResizeObserver experiment [https://niurop.github.io/expo/expo/2/index.html](https://niurop.github.io/expo/expo/2/index.html)
 
 ## Planned experiments:
 - dynamically creating symbols with svg for specific size with cashing
