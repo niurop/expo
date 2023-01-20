@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Size dependent SVG generator</title>
+    <style>
+      * {
+        border-radius: 5px;
+      }
+
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      svg {
+        padding: 10px;
+      }
+
+      main,
+      #buttons {
+        margin: auto;
+        width: fit-content;
+      }
+
+      main * :hover {
+        background-color: rgba(42, 133, 202, 0.1);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Size dependent SVGs</h1>
+    Set size and click buttons to generate new SVG.
+    <h2>Notes:</h2>
+    <ul>
+      <li>
+        You can generate simple svg using
+        <pre>`...${...}...`</pre>
+        notation;
+      </li>
+      <li>
+        would be good to save these SVGs to
+        <pre>:root</pre>
+        css variables, or even better to save them as backgrounds (will css need
+        to redraw the symbol every time if used as
+        <pre>background: var(--symbol-id);</pre>
+        ??? );
+      </li>
+      <li>
+        need to create, find, or let somebody create good SVGs for typesetting;
+      </li>
+      <li>
+        would be awesome to create an abstraction for "dynamic" programming;
+      </li>
+      <li>more control over size and position of svgs needed;</li>
+    </ul>
+    <main>
+      <div id="buttons">
+        <label>size:</label> <input type="number" value="100" />
+      </div>
+      <div id="svgs"></div>
+    </main>
+    <script>
+      const Symbols = (() => {
+        const cash = {};
+
+        const addNewSymbol = (name, generator, sizeHints) => {
+          cash[name] = {
+            f: generator,
+            hints: sizeHints,
+            cash: {},
+          };
+        };
+
+        const get = (name, size) => {
+          if (!(name in Symbols.cash)) return undefined;
+          const symbolData = Symbols.cash[name];
+          const h = symbolData.hints;
+          const key =
+            ("outer" in size ? "o" : "i") +
+            (h === "h"
+              ? `h${size.h}`
+              : h === "w"
+              ? `w${size.w}`
+              : h === "b"
+              ? `b${size.w}x${size.h}`
+              : "-");
+          if (key in symbolData.cash) return symbolData.cash[key];
+          const symbol = symbolData.f(size);
+          if (
+            "svg" in symbol &&
+            "w" in symbol &&
+            "h" in symbol &&
+            "W" in symbol &&
+            "H" in symbol
+          ) {
+            symbolData.cash[key] = symbol;
+            return symbol;
+          } else {
+            console.error(
+              `function generator for symbol ${name} didn't return correct structure`
+            );
+            return undefined;
+          }
+        };
+
+        return { cash, get, addNewSymbol };
+      })();
+
+      Symbols.addNewSymbol(
+        "bracket-left",
+        (size) => {
+          const s = 2;
+          const h = size.h;
+          const H = h + 2 * s;
+          const w = 0;
+          const W = 3 * s;
+
+          const svg = [
+            `<svg height="${H}" width="${W}">`,
+            `<path d="`,
+            "M0 0 ",
+            `L${W} 0 `,
+            `L${W} ${s} `,
+            `L${s} ${s} `,
+            `L${s} ${H - s} `,
+            `L${W} ${H - s} `,
+            `L${W} ${H} `,
+            `L0 ${H} `,
+            'Z"></path>',
+            "</svg>",
+          ].join("");
+
+          return {
+            svg,
+            w,
+            h,
+            W,
+            H,
+          };
+        },
+        "h"
+      );
+
+      Symbols.addNewSymbol(
+        "bracket-right",
+        (size) => {
+          const s = 2;
+          const h = size.h;
+          const H = h + 2 * s;
+          const w = 0;
+          const W = 3 * s;
+
+          const svg = [
+            `<svg height="${H}" width="${W}">`,
+            `<path d="`,
+            "M0 0 ",
+            `L${W} 0 `,
+            `L${W} ${H} `,
+            `L0 ${H} `,
+            `L0 ${H - s} `,
+            `L${W - s} ${H - s} `,
+            `L${W - s} ${s} `,
+            `L0 ${s} `,
+            'Z"></path>',
+            "</svg>",
+          ].join("");
+
+          return {
+            svg,
+            w,
+            h,
+            W,
+            H,
+          };
+        },
+        "h"
+      );
+
+      Symbols.addNewSymbol(
+        "sum",
+        (size) => {
+          const s = 3;
+          const ss = 2 * s;
+          const h = size.h;
+          const H = h + 4 * s;
+          const w = 0;
+          const W = H / 2;
+
+          const svg = [
+            `<svg height="${H}" width="${W}">`,
+            `<path d="`,
+            "M0 0 ",
+            `L${W} 0 `,
+            `L${W} ${ss} `,
+            `L${W - s} ${ss} `,
+            `L${W - s} ${s} `,
+            `L${s} ${s} `,
+            `L${W - s} ${H / 2} `,
+            `L${s} ${H - s} `,
+            `L${W - s} ${H - s} `,
+            `L${W - s} ${H - ss} `,
+            `L${W} ${H - ss} `,
+            `L${W} ${H} `,
+            `L0 ${H} `,
+            `L0 ${H - ss} `,
+            `L${W - ss - s} ${H / 2} `,
+            `L0 ${ss} `,
+            'Z"></path>',
+            "</svg>",
+          ].join("");
+
+          return {
+            svg,
+            w,
+            h,
+            W,
+            H,
+          };
+        },
+        "h"
+      );
+      {
+        const main = document.querySelector("main > #buttons");
+        const input = document.querySelector("main > #buttons > input");
+        const svgs = document.querySelector("main > #svgs");
+        const f = (name, size) => {
+          svgs.innerHTML += Symbols.get(name, size)?.svg;
+        };
+
+        for (const key in Symbols.cash) {
+          const button = document.createElement("button");
+          button.innerText = key;
+          button.onclick = () => f(key, { h: Number(input.value) });
+          main.appendChild(button);
+        }
+      }
+    </script>
+  </body>
+</html>
