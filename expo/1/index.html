@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      * {
+        border-radius: 5px;
+      }
+
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      #example {
+        margin: auto;
+        width: max-content;
+        display: flex;
+        justify-items: center;
+        align-content: space-around;
+        align-self: center;
+      }
+
+      #example > * {
+        display: flex;
+        flex-direction: row;
+        height: fit-content;
+      }
+
+      #example .assignment {
+        display: flex;
+        align-items: center;
+      }
+
+      #example .assignment > * {
+        padding: 5px;
+      }
+
+      #example .matrix {
+        display: flex;
+        position: relative;
+      }
+
+      #example .matrix::before,
+      #example .matrix::after {
+        content: "";
+        top: 0;
+        bottom: 0;
+        border-top: 2px solid black;
+        border-bottom: 2px solid black;
+        width: 4px;
+      }
+
+      #example .matrix::after {
+        right: 0;
+        border-right: 2px solid black;
+      }
+
+      #example .matrix::before {
+        left: 0;
+        border-left: 2px solid black;
+      }
+
+      #example td {
+        padding: 3px;
+        text-align: center;
+      }
+
+      #example [contenteditable="true"]:hover {
+        background-color: antiquewhite;
+      }
+
+      #example * :hover {
+        background-color: rgba(42, 133, 202, 0.1);
+        border-radius: 5px;
+      }
+
+      #example pre {
+        display: inline-block;
+        background: none;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Matrix display experiment</h1>
+    Edit fields with antiquewhite background on hover to see responsive matrix.
+    <h2>Notes:</h2>
+    <ul>
+      <li>
+        <pre>&lttable&gt</pre>
+        is best for creating constructions which align by columns and rows;
+      </li>
+      <li>
+        You can use
+        <pre>borders</pre>
+        with
+        <pre>::before</pre>
+        and
+        <pre>::after</pre>
+        for matrix brackets;
+      </li>
+      <li>
+        using
+        <pre>display: flex<br>align-items: center;</pre>
+        is easiest to keep everything centered;
+      </li>
+      <li>
+        need a way to disable creating new lines when using
+        <pre>contenteditable</pre>
+        ;
+      </li>
+    </ul>
+    <div id="example">
+      <div>
+        <div class="assignment">
+          <pre>let</pre>
+          <pre contenteditable="true">A</pre>
+          <pre>:=</pre>
+          <table class="matrix">
+            <tbody>
+              <tr>
+                <td>
+                  <table class="matrix">
+                    <tbody>
+                      <tr>
+                        <td><pre contenteditable="true">1</pre></td>
+                        <td><pre contenteditable="true">2</pre></td>
+                      </tr>
+                      <tr>
+                        <td><pre contenteditable="true">3</pre></td>
+                        <td><pre contenteditable="true">4</pre></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </td>
+                <td><pre contenteditable="true">5</pre></td>
+              </tr>
+              <tr>
+                <td><pre contenteditable="true">6</pre></td>
+                <td><pre contenteditable="true">7</pre></td>
+              </tr>
+              <tr>
+                <td><pre contenteditable="true">8</pre></td>
+                <td><pre contenteditable="true">9</pre></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
