@@ -27,3 +27,4 @@ I do a lot of testing and experimenting. Typically, I delete them after I'm done
 - create abstraction over dynamic programming
 - test css optimizations for runtime generated svgs
 - good quality svgs for typesetting
+- simple editor for parametric svgs
