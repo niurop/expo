@@ -7,11 +7,11 @@ I do a lot of testing and experimenting. Typically, I delete them after I'm done
 1. Matrix display experiment [https://niurop.github.io/expo/expo/1/index.html](https://niurop.github.io/expo/expo/1/index.html)
 2. ResizeObserver experiment [https://niurop.github.io/expo/expo/2/index.html](https://niurop.github.io/expo/expo/2/index.html)
 3. Size dependent SVG generator [https://niurop.github.io/expo/expo/3/index.html](https://niurop.github.io/expo/expo/3/index.html)
+4. Symbols with resizeObserver [https://niurop.github.io/expo/expo/4/index.html](https://niurop.github.io/expo/expo/4/index.html)
 
 ## Planned experiments:
 
 - optimizing cash usage for symbols (removing unused)
-- connecting resizeObserver to dynamic symbols
 - disabling new lines in contenteditable
 - creating templates for positioning elements in math equations
 - creating a nice interface for extending tables
