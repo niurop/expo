@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Position: absolute</title>
+    <style>
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      * {
+        border-radius: 5px;
+      }
+
+      #box {
+        padding: 100px;
+        background-color: antiquewhite;
+      }
+      #container {
+        position: initial;
+        background-color: aquamarine;
+        height: 100px;
+        padding: 50px;
+      }
+      div.absolute {
+        position: absolute;
+        top: 50px;
+        background-color: aqua;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      main > div {
+        position: relative;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Position: absolute</h1>
+    Click the button to cycle different css
+    <pre>position</pre>
+    options.
+    <h2>Notes:</h2>
+    <ul>
+      <li>position absolute stack on top each other;</li>
+      <li>
+        position offset is calculated with respect to the youngest ancestor with
+        <pre>position:</pre>
+        other than
+        <pre>position: static</pre>
+        ;
+      </li>
+      <li>
+        <pre>position: inherit</pre>
+        takes the
+        <pre>position:</pre>
+        of the parent;
+      </li>
+      <li>changing the position invalidates DOMbox sizing;</li>
+    </ul>
+    <main>
+      <button>
+        Change css position from:
+        <pre></pre>
+      </button>
+      <div>
+        <div id="box"></div>
+        <div id="container">
+          <div class="absolute">
+            ABC
+            <div class="absolute">DEF</div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      let i = 0;
+      const positions = [
+        "initial",
+        "inherit",
+        "static",
+        "absolute",
+        "fixed",
+        "relative",
+        "sticky",
+      ];
+      const positionText = document.querySelector("main > button > pre");
+      const container = document.querySelector("#container");
+      container.style.position = positionText.innerText = positions[i];
+      document
+        .querySelector("main > button")
+        .addEventListener("click", (event) => {
+          const btn = event.target;
+          i++;
+          i >= positions.length && (i = 0);
+          container.style.position = positionText.innerText = positions[i];
+        });
+    </script>
+  </body>
+</html>

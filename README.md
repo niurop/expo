@@ -8,6 +8,7 @@ I do a lot of testing and experimenting. Typically, I delete them after I'm done
 2. ResizeObserver experiment [https://niurop.github.io/expo/expo/2/index.html](https://niurop.github.io/expo/expo/2/index.html)
 3. Size dependent SVG generator [https://niurop.github.io/expo/expo/3/index.html](https://niurop.github.io/expo/expo/3/index.html)
 4. Symbols with resizeObserver [https://niurop.github.io/expo/expo/4/index.html](https://niurop.github.io/expo/expo/4/index.html)
+5. Position: absolute [https://niurop.github.io/expo/expo/5/index.html](https://niurop.github.io/expo/expo/5/index.html)
 
 ## Planned experiments:
 
