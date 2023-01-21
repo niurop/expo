@@ -28,3 +28,5 @@ I do a lot of testing and experimenting. Typically, I delete them after I'm done
 - test css optimizations for runtime generated svgs
 - good quality svgs for typesetting
 - simple editor for parametric svgs
+- by hand positioning system using css variables
+- box model for displaying symbols
