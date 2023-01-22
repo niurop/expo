@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Better svg constructions</title>
+    <script src="paths.js"></script>
+    <style>
+      * {
+        border-radius: 5px;
+      }
+
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      textarea {
+        min-width: 50%;
+        min-height: 20ch;
+      }
+      main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-items: center;
+      }
+      input[type="checkbox"] {
+        width: 3ch;
+        height: 3ch;
+      }
+      main > * {
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Better svg constructions</h1>
+    Write down code (it goes directly to
+    <pre>eval</pre>
+    ). Set
+    <pre>Path</pre>
+    variable to the required path, and click
+    <pre>render</pre>
+    .
+    <h2>Notes:</h2>
+    <ul>
+      <li>
+        making svg abstraction in js is easy (at least for the simple shapes and
+        rules - I don't care for relative positioning);
+      </li>
+      <li>
+        combining two paths is not easy... (I wanted to use
+        <pre>B</pre>
+        which mostly works like
+        <pre>L</pre>
+        )
+      </li>
+    </ul>
+    <main>
+      Defined functions:
+      <pre>
+type Point = { x: number; y: number }
+type Path = (Point | "L" | "Q" | "C" | "B")[]
+
+L = "L", Q = "Q", C = "C", B = "B"
+P = (x: number, y: number): Point
+reversePath = (path: Path): Path
+translatePath = (path: Path, by: Point): Path
+reflectPath = (path: Path, orientation: "H" | "V" | "B"): Path</pre
+      >
+      <textarea>
+const h = 100;
+
+const s = 5;
+const s3 = 3*s;
+const hs = h-s;
+
+path = [P(0,0), L, P(s3, 0), L, P(s3,s), L, P(s,s), L, P(s,hs), L, P(s3,hs), L, P(s3,h), L, P(0,h)]</textarea
+      >
+      <div>show path: <input type="checkbox" checked /></div>
+      <div>show points: <input type="checkbox" /></div>
+      <button>render</button>
+      <svg></svg>
+    </main>
+    <script>
+      const codeObj = document.querySelector("textarea");
+      const checkboxObjs = document.querySelectorAll("input");
+      const svgObj = document.querySelector("svg");
+      document.querySelector("button").addEventListener("click", () => {
+        const code = codeObj.value;
+        let path = [];
+        eval(code);
+        f(path, checkboxObjs[0].checked, checkboxObjs[1].checked);
+      });
+
+      const f = (path, showPath = true, points = true) => {
+        const aabb = getPathAABB(path);
+        const fixed = translatePath(path, { x: -aabb.l + 5, y: -aabb.t + 5 });
+        const svgObj = document.querySelector("svg");
+        svgObj.innerHTML = "";
+        console.log(validatePath(fixed));
+        console.log(fixed);
+        svgObj.setAttribute("width", aabb.w + 10);
+        svgObj.setAttribute("height", aabb.h + 10);
+
+        if (showPath) svgObj.innerHTML += `<path d="${renderPath(fixed)}"/>`;
+
+        if (points) {
+          const ps = extractPoints(fixed);
+          ps.forEach((p) => {
+            svgObj.innerHTML += `<circle cx="${p.x}" cy="${p.y}" r="2" fill="red"/>`;
+          });
+        }
+      };
+    </script>
+  </body>
+</html>

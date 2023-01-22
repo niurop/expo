@@ -9,6 +9,7 @@ I do a lot of testing and experimenting. Typically, I delete them after I'm done
 3. Size dependent SVG generator [https://niurop.github.io/expo/expo/3/index.html](https://niurop.github.io/expo/expo/3/index.html)
 4. Symbols with resizeObserver [https://niurop.github.io/expo/expo/4/index.html](https://niurop.github.io/expo/expo/4/index.html)
 5. Position: absolute [https://niurop.github.io/expo/expo/5/index.html](https://niurop.github.io/expo/expo/5/index.html)
+6. Better svg constructions [https://niurop.github.io/expo/expo/6/index.html](https://niurop.github.io/expo/expo/6/index.html)
 
 ## Planned experiments:
 
@@ -28,6 +29,5 @@ I do a lot of testing and experimenting. Typically, I delete them after I'm done
 - create abstraction over dynamic programming
 - test css optimizations for runtime generated svgs
 - good quality svgs for typesetting
-- simple editor for parametric svgs
 - by hand positioning system using css variables
 - box model for displaying symbols
