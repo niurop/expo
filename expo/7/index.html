@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>float: left breaks box model in display: inline-block</title>
+    <style>
+      * {
+        border-radius: 5px;
+      }
+
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      :root {
+        --block-outline: black;
+        --detail-outline: lime;
+      }
+
+      input {
+        width: 3ch;
+        height: 3ch;
+      }
+
+      main > div {
+        display: flex;
+        justify-content: space-around;
+      }
+
+      main > div > div > div > * {
+        outline: 3px solid var(--block-outline);
+      }
+
+      div#block > * {
+        outline: 1px solid var(--detail-outline);
+        clear: both;
+        width: 100%;
+      }
+
+      div#block {
+        display: inline-block;
+      }
+      div#block > div > pre {
+        display: inline;
+        text-decoration: line-through;
+      }
+
+      div#block > div > input:checked + pre {
+        text-decoration: none;
+      }
+
+      div#test_2 #block {
+        min-width: 100px;
+      }
+
+      div#test_2 #block > * {
+        width: fit-content;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>float: left breaks box model in display: inline-block</h1>
+    Use checkboxes to enable/disable css styles.
+    <h2>Notes:</h2>
+    <ul>
+      <li>
+        <pre>float: left</pre>
+        breaks standard box model;
+      </li>
+      <li>
+        <pre>float: left</pre>
+        blocks count for bounding box calculations;
+      </li>
+      <li>
+        <pre>float: left</pre>
+        blocks doesn't count when positioning inline elements (even as a child
+        of an inline element...) - this is the broken part, since normally box
+        model doesn't count children for calculations;
+      </li>
+      <li>
+        it works like, the system first calculates everything inside the block
+        (including the
+        <pre>float: left</pre>
+        elements), saves their relative positions, then forgets about
+        <pre>float: left</pre>
+        elements, calculates inline positions, and only then calculates the
+        bounding box;
+      </li>
+      <li>
+        it may also work by calculating the blocks baseline without
+        <pre>float: left</pre>
+        elements;
+      </li>
+    </ul>
+    <main>
+      <div id="options">
+        <div><label>block-outline</label><input type="checkbox" /></div>
+        <div><label>detail-outline</label><input type="checkbox" /></div>
+      </div>
+      <div>
+        <div id="test_1">
+          <h2>float: left;</h2>
+          <div>
+            <span>base</span>
+            <div id="block" opt-A="float:left" opt-B="float:none">
+              <div>
+                <input type="checkbox" checked />
+                <pre>float: left;</pre>
+              </div>
+              <div>
+                <input type="checkbox" />
+                <pre>float: left;</pre>
+              </div>
+              <div>
+                <input type="checkbox" checked />
+                <pre>float: left;</pre>
+              </div>
+            </div>
+            <span>base</span>
+          </div>
+        </div>
+
+        <div id="test_2">
+          <h2>position: absolute;</h2>
+          <div>
+            <span>base</span>
+            <div
+              id="block"
+              opt-A="position: absolute"
+              opt-B="position: static"
+              style="position: relative"
+            >
+              <div>
+                <input type="checkbox" />
+                <pre>position: absolute;</pre>
+              </div>
+              <div>
+                <input type="checkbox" />
+                <pre>position: absolute;</pre>
+              </div>
+              <div>
+                <input type="checkbox" checked />
+                <pre>position: absolute;</pre>
+              </div>
+            </div>
+            <span>base</span>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script>
+      const f = (obj) => {
+        const parent = obj.parentNode;
+        const block = parent.parentNode;
+        const optA = block.getAttribute("opt-A");
+        const optB = block.getAttribute("opt-B");
+        parent.setAttribute("style", obj.checked ? optA : optB);
+      };
+      document
+        .querySelectorAll('div#block input[type="checkbox"]')
+        .forEach((input) => {
+          f(input);
+          input.addEventListener("input", (e) => f(e.target));
+        });
+      const g = (obj) => {
+        const option = obj.parentNode.querySelector("label").innerHTML;
+        console.log(option);
+        switch (option) {
+          case "block-outline":
+            document.documentElement.style.setProperty(
+              "--block-outline",
+              obj.checked ? "black" : "transparent"
+            );
+            return;
+          case "detail-outline":
+            document.documentElement.style.setProperty(
+              "--detail-outline",
+              obj.checked ? "lime" : "transparent"
+            );
+            return;
+        }
+      };
+      document
+        .querySelectorAll('div#options input[type="checkbox"]')
+        .forEach((input) => {
+          console.log(input);
+          g(input);
+          input.addEventListener("input", (e) => g(e.target));
+        });
+    </script>
+  </body>
+</html>
