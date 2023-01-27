@@ -11,6 +11,7 @@ I do a lot of testing and experimenting. Typically, I delete them after I'm done
 5. Position: absolute [https://niurop.github.io/expo/expo/5/index.html](https://niurop.github.io/expo/expo/5/index.html)
 6. Better svg constructions [https://niurop.github.io/expo/expo/6/index.html](https://niurop.github.io/expo/expo/6/index.html)
 7. float: left breaks box model in display: inline-block [https://niurop.github.io/expo/expo/7/index.html](https://niurop.github.io/expo/expo/7/index.html)
+8. SimpleScreens framework [https://niurop.github.io/expo/expo/8/index.html](https://niurop.github.io/expo/expo/8/index.html)
 
 ## Planned experiments:
 
