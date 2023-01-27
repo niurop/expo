@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SimpleScreens framework</title>
+    <script src="./simpleScreens.js"></script>
+    <style>
+      * {
+        border-radius: 5px;
+      }
+
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      .ss-hidden {
+        display: none !important;
+      }
+
+      main {
+        margin: auto;
+        overflow: hidden;
+        width: 350px;
+        height: 500px;
+        border-radius: 10px;
+        box-shadow: rgba(60, 64, 67, 0.8) 0px 2px 4px 0px;
+      }
+
+      main > div {
+        width: 100%;
+        height: 100%;
+      }
+
+      #screen_init {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      main form {
+        max-width: 90%;
+        padding: 10%;
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      main form * {
+        width: 100%;
+        border-radius: 10px;
+      }
+
+      main form span:first-child {
+        font-size: 5ch;
+        text-align: center;
+        margin-bottom: 20%;
+      }
+
+      input,
+      button {
+        padding: 0.75em;
+        box-shadow: rgba(60, 64, 67, 0.8) 0px 2px 4px 0px;
+        margin-bottom: 10%;
+        border: none;
+        background-color: #f7f7f7;
+        font-weight: bold;
+        transition: transform ease-in-out 0.1s;
+      }
+
+      button.primary {
+        background-color: #8ac3fd;
+      }
+
+      button:hover {
+        transform: scale(1.05);
+      }
+
+      button:active {
+        transform: scale(0.95);
+      }
+
+      #screen_main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-evenly;
+      }
+
+      #screen_main #username {
+        font-size: 0.75em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>SimpleScreens framework</h1>
+    This is a simple js class for creating applications with simple screens. The
+    form doesn't check if what You have imputed is correct.
+    <h2>Notes:</h2>
+    <ul>
+      <li>
+        create new instance of
+        <pre>SimpleScreens</pre>
+        class with a script executed after
+        <pre>body</pre>
+        is loaded;
+      </li>
+      <li>
+        create a standard html structure with some elements ids starting with
+        <pre>screen_</pre>
+        ;
+      </li>
+      <li>
+        elements with matching beginnings of ids, will be listed as
+        <pre>screens</pre>
+        ;
+      </li>
+      <li>
+        children of each
+        <pre>screen</pre>
+        with set ids will be added to a list of
+        <pre>DOMElements</pre>
+        for the
+        <pre>screen</pre>
+        ;
+      </li>
+      <li>
+        you may specify
+        <pre>init</pre>
+        and
+        <pre>transition</pre>
+        functions for preparing each screen;
+      </li>
+      <li>you may add and remove screens to the existing ones;</li>
+      <li>
+        css can be annoying with ids - use
+        <pre>:where(#screen_id)</pre>
+        and if nothing other works
+        <pre>!important</pre>
+        ;
+      </li>
+    </ul>
+    <main>
+      <div id="screen_init">
+        <form id="form" onsubmit="return false;">
+          <span>Welcome</span>
+          <span>Username or email</span>
+          <input id="username" type="text" name="username" required />
+          <span>Password</span>
+          <input id="password" type="password" name="password" required />
+          <button class="primary">Sign in</button>
+          <button>Sign up</button>
+        </form>
+      </div>
+
+      <div id="screen_main">
+        <form id="form" onsubmit="return false;">
+          <span>Welcome<br /><span id="username"></span></span>
+          <p>This is all that I have prepared for today.</p>
+          <button id="logout">Logout</button>
+        </form>
+      </div>
+    </main>
+
+    <script>
+      const State = {
+        user: { login: "", password: "" },
+      };
+
+      const inits = {
+        screen_init: (sec) => {
+          sec.DOMElements.form.onsubmit = () => {
+            State.user.login = sec.DOMElements.username.value;
+            State.user.password = sec.DOMElements.password.value;
+            screens.change("screen_main");
+            return false;
+          };
+        },
+        screen_main: (sec) => {
+          sec.DOMElements.form.onsubmit = () => {
+            State.user.login = "";
+            State.user.password = "";
+            screens.change("screen_init");
+            return false;
+          };
+        },
+      };
+
+      const transitions = {
+        screen_main: (sec) => {
+          sec.DOMElements.username.innerHTML = State.user.login;
+        },
+      };
+
+      const screens = new SimpleScreens("screen_", inits, transitions);
+      screens.change("screen_init");
+    </script>
+  </body>
+</html>
