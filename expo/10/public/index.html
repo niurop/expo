@@ -1,0 +1,163 @@
+<html>
+  <head>
+    <style>
+      * {
+        border-radius: 10px;
+        padding: 5px;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+      table > tr {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.4);
+      }
+
+      table > tr > td:nth-child(1) {
+        font-size: 0.7em;
+      }
+
+      table > tr > td:nth-child(2) {
+        font-size: 0.7em;
+      }
+      table > tr > td:nth-child(3) {
+        padding: 5px;
+        padding-left: 20px;
+      }
+
+      table > tr.server-msg {
+        font-size: 0.7em;
+        color: gray;
+      }
+
+      main,
+      main > section,
+      form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      main {
+        flex-direction: column;
+      }
+
+      main > * {
+        margin: 1em;
+      }
+
+      span#msg {
+        height: fit-content;
+        width: fit-content;
+        min-height: 4em;
+        min-width: 50vw;
+        display: block;
+        border: solid thin gray;
+        padding: 5px;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <section id="login">
+        <form onsubmit="logIn(); return false;">
+          <label>name:</label><input /><button>Signin</button>
+        </form>
+      </section>
+      <div>Status:<span id="status">No login</span></div>
+      <section id="chat">
+        <table id="chatTable"></table>
+      </section>
+      <section id="msg-sec">
+        <form onsubmit="sendMsg(); return false;">
+          <label>message:</label>
+          <span id="msg" contenteditable="true"></span>
+          <button>send &gt</button>
+        </form>
+      </section>
+    </main>
+    <script>
+      let id = "";
+      let name = "";
+      let latest_timestamp = 0;
+
+      const chatArea = document.querySelector("table#chatTable");
+
+      const addChatEntry = (msg) => {
+        const time = document.createElement("td");
+        const sender = document.createElement("td");
+        const message = document.createElement("td");
+        const row = document.createElement("tr");
+
+        const d = new Date(msg.time);
+        time.innerText = `${d.getHours().toString().padStart(2, "0")}:${d
+          .getMinutes()
+          .toString()
+          .padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}`;
+        sender.innerText = msg.sender;
+        message.innerText = msg.message;
+
+        latest_timestamp = msg.time;
+
+        if (msg.sender === "SERVER") row.classList.add("server-msg");
+
+        row.append(time, sender, message);
+        chatArea.append(row);
+      };
+
+      const logIn = () => {
+        name = document.querySelector("section#login input").value;
+
+        if (!!window.EventSource) {
+          var source = new EventSource(`/subscribe?name=${name}`);
+
+          source.onmessage = (e) => {
+            const data = JSON.parse(e.data);
+            if (data.id) {
+              id = data.id;
+              data.chatHistory.forEach(addChatEntry);
+            } else {
+              addChatEntry(data);
+            }
+          };
+
+          source.onopen = (e) => {
+            document.querySelector("span#status").innerHTML = "Connected";
+          };
+
+          source.onerror = (e) => {
+            if (e.eventPhase == EventSource.CLOSED) source.close();
+            if (e.target.readyState == EventSource.CLOSED) {
+              document.querySelector("section#chat span#status").innerHTML =
+                "Disconnected";
+            } else if (e.target.readyState == EventSource.CONNECTING) {
+              document.querySelector("section#chat span#status").innerHTML =
+                "Connecting...";
+            }
+          };
+        } else {
+          console.log("Your browser doesn't support SSE");
+        }
+      };
+
+      const sendMsg = () => {
+        const msg = document.querySelector("span#msg").innerText;
+        fetch("/message", {
+          method: "POST",
+          cache: "no-cache",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          redirect: "manual",
+          referrerPolicy: "no-referrer",
+          body: JSON.stringify({ id, msg }),
+        }).then((res) => {
+          if (res.status !== 200) console.error(res);
+          else;
+          return false;
+        });
+      };
+    </script>
+  </body>
+</html>

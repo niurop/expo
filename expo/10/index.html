@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple chat with node.js</title>
+    <script src="./simpleScreens.js"></script>
+    <style>
+      * {
+        border-radius: 5px;
+      }
+
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Simple chat with node.js</h1>
+    Simple chat app using
+    <pre>SSE (Server Side Events)</pre>
+    and
+    <pre>express</pre>
+    for backend.
+    <h2>How to run</h2>
+    <ul>
+      <li>
+        install
+        <pre>nodejs</pre>
+        ;
+      </li>
+      <li>copy project files;</li>
+      <li>
+        run
+        <pre>$npm install express --save</pre>
+        to locally install
+        <pre>expressjs</pre>
+        library;
+      </li>
+      <li>
+        run
+        <pre>$node server.js</pre>
+        to start server;
+      </li>
+      <li>
+        open webpage
+        <pre>localhost:3000</pre>
+        in a web browser (preferably multiple times);
+      </li>
+      <li>
+        enter a
+        <pre>name</pre>
+        for each user and press
+        <pre>signin</pre>
+        ;
+      </li>
+      <li>
+        try writing anything in the
+        <pre>message</pre>
+        field and press
+        <pre>send &gt</pre>
+        ;
+      </li>
+    </ul>
+    <h2>Notes:</h2>
+    <ul>
+      <li>
+        server can keep sending data as long as the response object is not
+        closed;
+      </li>
+      <li>
+        to prevent client from closing the response object, we need to ask it
+        <pre>
+"Content-Type": "text/event-stream",
+"Cache-Control": "no-cache",
+Connection: "keep-alive",</pre
+        >
+        in the response header (the
+        <pre>no-cache</pre>
+        option is to not waste space);
+      </li>
+      <li>
+        on client side We can use
+        <pre>EventSource</pre>
+        to listen to the events (for some reason it only accepts
+        <pre>GET</pre>
+        messages);
+      </li>
+      <li>
+        data needs to be written as
+        <pre>data: {PAYLOAD}\n\n</pre>
+        ;
+      </li>
+    </ul>
+  </body>
+</html>
