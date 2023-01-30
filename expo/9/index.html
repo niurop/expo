@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resizable slider</title>
+    <style>
+      * {
+        border-radius: 5px;
+      }
+
+      pre {
+        display: inline-block;
+        background-color: lightgray;
+        padding: 3px;
+        border-radius: 3px;
+        font-weight: bold;
+      }
+
+      main {
+        margin: auto;
+        overflow: hidden;
+        width: fit-content;
+        height: fit-content;
+        border-radius: 10px;
+        box-shadow: rgba(60, 64, 67, 0.8) 0px 2px 4px 0px;
+      }
+
+      div.slider {
+        display: block;
+        position: relative;
+        overflow: hidden;
+        resize: both;
+        min-width: 50px;
+        min-height: 50px;
+        background-color: beige;
+        width: 50px;
+        height: 50px;
+        padding: 10px;
+        border-radius: 10px;
+      }
+
+      input[type="range"] {
+        margin: 0;
+        position: relative;
+        transform-origin: left top;
+        transform: rotate(-90deg) translateX(-100%);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Resizable slider</h1>
+    Resize element and notice the slider.
+    <h2>Notes:</h2>
+    <ul>
+      <li>
+        It is easy to resize sliders using
+        <pre>ResizeObserver</pre>
+        .
+      </li>
+    </ul>
+    <main>
+      <div class="slider">
+        <input type="range" />
+      </div>
+    </main>
+    <script>
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          if (entry.target.classList.contains("slider") && entry.contentRect) {
+            const slider = entry.target.querySelector('input[type="range"]');
+            const { width, height } = entry.contentRect;
+
+            const vertical = height > width;
+            if (vertical) {
+              slider.style.width = `${height}px`;
+              slider.style.height = `${width}px`;
+              slider.style.transform = "rotate(-90deg) translateX(-100%)";
+            } else {
+              slider.style.width = `${width}px`;
+              slider.style.height = `${height}px`;
+              slider.style.transform = "none";
+            }
+          }
+        }
+      });
+      resizeObserver.observe(document.querySelector("div.slider"));
+    </script>
+  </body>
+</html>
