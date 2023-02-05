@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script>
+      const f = (name) => console.log(name);
+      f("1st normal script in head");
+
+      window.onload = () => f("window.onload");
+
+      document.documentElement.onload = () =>
+        f("document.documentElement.onload");
+      document.onload = () => f("document.onload");
+    </script>
+    <script defer>
+      f("1st deferred script in head");
+    </script>
+    <script defer>
+      f("2nd deferred script in head");
+    </script>
+    <script async>
+      f("1nd async script in head");
+    </script>
+    <script defer>
+      f("3rd deferred script in head");
+    </script>
+    <script src="index.js"></script>
+    <script src="index.js"></script>
+    <script src="index.js" defer></script>
+    <script defer>
+      f("4th deferred script in head");
+    </script>
+
+    <script async src="index.js"></script>
+    <script src="index.js"></script>
+    <title>script order</title>
+    <script></script>
+  </head>
+  <body>
+    <script>
+      f("body > script:last-child");
+      document.body.onload = () => f("document.body.onload");
+    </script>
+  </body>
+</html>

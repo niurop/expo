@@ -14,6 +14,8 @@ I do a lot of testing and experimenting. Typically, I delete them after I'm done
 8. SimpleScreens framework [https://niurop.github.io/expo/expo/8/index.html](https://niurop.github.io/expo/expo/8/index.html)
 9. Resizable slider [https://niurop.github.io/expo/expo/9/index.html](https://niurop.github.io/expo/expo/9/index.html)
 10. Simple chat with node.js and SSE [https://niurop.github.io/expo/expo/10/index.html](https://niurop.github.io/expo/expo/10/index.html)
+11. Easy way to change languages on HTML document [https://niurop.github.io/expo/expo/11/index.html](https://niurop.github.io/expo/expo/11/index.html)
+12. Test of defer/async/onload scrypt loading [https://niurop.github.io/expo/expo/12/index.html](https://niurop.github.io/expo/expo/12/index.html)
 
 ## Planned experiments:
 

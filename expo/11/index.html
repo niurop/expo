@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Language change</title>
+    <style>
+      lang-pl,
+      lang-en {
+        display: none;
+      }
+
+      lang-en:lang(en) {
+        display: contents;
+      }
+
+      lang-pl:lang(pl) {
+        display: contents;
+      }
+    </style>
+    <script>
+      let languages = ["pl", "en"];
+      function changeLang() {
+        const html = document.documentElement;
+        const lang = languages.shift();
+        languages.push(lang);
+        html.setAttribute("lang", lang);
+      }
+    </script>
+  </head>
+  <body>
+    <button onclick="changeLang()">
+      <lang-pl>Zmień język na Angielski</lang-pl>
+      <lang-en>Change language to Polsih</lang-en>
+    </button>
+    <lang-pl>Test języka polskiego</lang-pl>
+    <lang-en>English language test</lang-en>
+  </body>
+</html>
